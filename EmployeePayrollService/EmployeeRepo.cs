@@ -7,9 +7,10 @@ namespace EmployeePayrollService
     public class EmployeeRepo
     {
         public static string connectionString = "Data Source=DESKTOP-QP0QMA4\\SQLEXPRESS;Initial Catalog=payroll_service;Integrated Security=True";
-        SqlConnection connection = new SqlConnection(connectionString);
+        SqlConnection connection;
         public void GetAllEmployee()
         {
+            connection = new SqlConnection(connectionString);
             try
             {
                 EmployeeModel employeeModel = new EmployeeModel();
@@ -50,6 +51,51 @@ namespace EmployeePayrollService
             {
                 System.Console.WriteLine(e.Message);
             }
+        }
+
+        public bool AddEmployee(EmployeeModel model)
+        {
+            connection = new SqlConnection(connectionString);
+            try
+            {
+                using (this.connection)
+                {                   
+                    SqlCommand command = new SqlCommand("SpAddEmployeeDetails", this.connection);
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@EmployeeName", model.EmployeeFirstName);
+                    command.Parameters.AddWithValue("@PhoneNumber", model.PhoneNumber);
+                    command.Parameters.AddWithValue("@Address", model.Address);
+                    command.Parameters.AddWithValue("@Department", model.Department);
+                    command.Parameters.AddWithValue("@Gender", model.Gender);
+                    command.Parameters.AddWithValue("@BasicPay", model.BasicPay);
+                    command.Parameters.AddWithValue("@Deductions", model.Deductions);
+                    command.Parameters.AddWithValue("@TaxablePay", model.TaxablePay);
+                    command.Parameters.AddWithValue("@Tax", model.Tax);
+                    command.Parameters.AddWithValue("@NetPay", model.NetPay);
+                    command.Parameters.AddWithValue("@StartDate", DateTime.Now);
+                    //command.Parameters.AddWithValue("@City", model.City);
+                    //command.Parameters.AddWithValue("@Country", model.Country);
+
+                    this.connection.Open();
+                    var result = command.ExecuteNonQuery();
+                    this.connection.Close();
+                    if (result != 0)
+                    {
+
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                this.connection.Close();
+            }
+            return false;
         }
     }
 }
