@@ -102,11 +102,14 @@ namespace EmployeePayrollService
             {
                 using (this.connection)
                 {
-                    string query = @"Update employee_payroll set basic_pay ="+salary+" where name ='"+name+"';";
-                    SqlCommand cmd = new SqlCommand(query, this.connection);
+                    SqlCommand command = new SqlCommand("SpUpdateSalary", this.connection);
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@EmployeeName", name);
+                    command.Parameters.AddWithValue("@BasicPay", salary);
+
                     this.connection.Open();
 
-                    var result = cmd.ExecuteNonQuery();
+                    var result = command.ExecuteNonQuery();
                     if(result != 0)
                     {
                         return true;
