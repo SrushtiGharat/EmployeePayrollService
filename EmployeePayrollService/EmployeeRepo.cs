@@ -73,15 +73,42 @@ namespace EmployeePayrollService
                     command.Parameters.AddWithValue("@Tax", model.Tax);
                     command.Parameters.AddWithValue("@NetPay", model.NetPay);
                     command.Parameters.AddWithValue("@StartDate", DateTime.Now);
-                    //command.Parameters.AddWithValue("@City", model.City);
-                    //command.Parameters.AddWithValue("@Country", model.Country);
 
                     this.connection.Open();
                     var result = command.ExecuteNonQuery();
                     this.connection.Close();
                     if (result != 0)
                     {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                this.connection.Close();
+            }
+            return false;
+        }
 
+        public bool UpdateSalary(string name, decimal salary)
+        {
+            connection = new SqlConnection(connectionString);
+            try
+            {
+                using (this.connection)
+                {
+                    string query = @"Update employee_payroll set basic_pay ="+salary+" where name ='"+name+"';";
+                    SqlCommand cmd = new SqlCommand(query, this.connection);
+                    this.connection.Open();
+
+                    var result = cmd.ExecuteNonQuery();
+                    if(result != 0)
+                    {
                         return true;
                     }
                     return false;
