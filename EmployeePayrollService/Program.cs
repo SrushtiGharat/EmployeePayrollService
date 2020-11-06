@@ -9,7 +9,7 @@ namespace EmployeePayrollService
             Console.WriteLine("Welcome to Employee Payroll Service");
             EmployeeRepo employeeRepo = new EmployeeRepo();
 
-            Console.WriteLine("1.Get all values\n2.Insert value\n3.Update salary");
+            Console.WriteLine("1.Get all values\n2.Insert value\n3.Update salary\n4.Get employees joined within a date range");
             int choice = Convert.ToInt32(Console.ReadLine());
 
             switch (choice)
@@ -44,6 +44,15 @@ namespace EmployeePayrollService
 
                     employeeRepo.UpdateSalary(name, salary);
                     Console.WriteLine("Salary updated successfully");
+                    break;
+                case 4:
+                    Console.WriteLine("Enter Dates");
+                    string[] dates = Console.ReadLine().Split(",");
+
+                    employeeRepo.GetEmployeesGivenDateRange(Convert.ToDateTime(dates[0]), Convert.ToDateTime(dates[1]));
+                    break;
+                default:
+                    Console.WriteLine("Invalid Input");
                     break;
             }
 
