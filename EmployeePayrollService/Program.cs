@@ -8,6 +8,7 @@ namespace EmployeePayrollService
         {
             Console.WriteLine("Welcome to Employee Payroll Service");
             EmployeeRepo employeeRepo = new EmployeeRepo();
+            bool result;
 
             Console.WriteLine("1.Get all values\n2.Insert value\n3.Update salary\n4.Get employees joined within a date range\n" +
                 "5.Get Aggregate Salary Details By Gender");
@@ -33,8 +34,12 @@ namespace EmployeePayrollService
                     employee.Tax = Convert.ToDecimal(details[8]);
                     employee.NetPay = Convert.ToDecimal(details[5]);
 
-                    employeeRepo.AddEmployee(employee);
-
+                    result = employeeRepo.AddEmployee(employee);
+                    if (result == false)
+                    {
+                        Console.WriteLine("Employee addition not successfull");
+                        break;
+                    }
                     Console.WriteLine("Records added successfully");
                     break;
 
@@ -43,7 +48,12 @@ namespace EmployeePayrollService
                     Console.WriteLine("Enter new salary");
                     decimal salary = Convert.ToDecimal(Console.ReadLine());
 
-                    employeeRepo.UpdateSalary(name, salary);
+                    result = employeeRepo.UpdateSalary(name, salary);
+                    if(result == false)
+                    {
+                        Console.WriteLine("Salary update not successfull");
+                        break;
+                    }
                     Console.WriteLine("Salary updated successfully");
                     break;
                 case 4:

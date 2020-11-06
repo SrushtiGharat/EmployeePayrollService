@@ -2,12 +2,19 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Data.SqlClient;
+using System.Data;
+
 namespace EmployeePayrollService
 {
     public class EmployeeRepo
     {
         public static string connectionString = "Data Source=DESKTOP-QP0QMA4\\SQLEXPRESS;Initial Catalog=payroll_service;Integrated Security=True";
         SqlConnection connection;
+        List<EmployeeModel> employeeList = new List<EmployeeModel>();
+
+        /// <summary>
+        /// Get list of employees from database
+        /// </summary>
         public void GetAllEmployee()
         {
             connection = new SqlConnection(connectionString);
@@ -22,6 +29,7 @@ namespace EmployeePayrollService
                     SqlDataReader dr = cmd.ExecuteReader();
                     if (dr.HasRows)
                     {
+                        employeeList.Clear();
                         while (dr.Read())
                         {
                             employeeModel.EmployeeID = dr.GetInt32(0);
@@ -36,6 +44,8 @@ namespace EmployeePayrollService
                             employeeModel.TaxablePay = dr.GetDecimal(9);
                             employeeModel.Tax = dr.GetDecimal(10);
                             employeeModel.NetPay = dr.GetDecimal(11);
+
+                            employeeList.Add(employeeModel);
 
                             Console.WriteLine(employeeModel.EmployeeID + " " + employeeModel.EmployeeFirstName + " " + employeeModel.BasicPay + " " + employeeModel.StartDate + " " + employeeModel.Gender + " " + employeeModel.PhoneNumber + " " + employeeModel.Address + " " + employeeModel.Department + " " + employeeModel.Deductions + " " + employeeModel.TaxablePay + " " + employeeModel.Tax + " " + employeeModel.NetPay);
                             Console.WriteLine("\n");
@@ -53,6 +63,11 @@ namespace EmployeePayrollService
             }
         }
 
+        /// <summary>
+        /// Add employee to database
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>true or false</returns>
         public bool AddEmployee(EmployeeModel model)
         {
             connection = new SqlConnection(connectionString);
@@ -62,6 +77,7 @@ namespace EmployeePayrollService
                 {                   
                     SqlCommand command = new SqlCommand("SpAddEmployeeDetails", this.connection);
                     command.CommandType = System.Data.CommandType.StoredProcedure;
+
                     command.Parameters.AddWithValue("@EmployeeName", model.EmployeeFirstName);
                     command.Parameters.AddWithValue("@PhoneNumber", model.PhoneNumber);
                     command.Parameters.AddWithValue("@Address", model.Address);
@@ -73,12 +89,17 @@ namespace EmployeePayrollService
                     command.Parameters.AddWithValue("@Tax", model.Tax);
                     command.Parameters.AddWithValue("@NetPay", model.NetPay);
                     command.Parameters.AddWithValue("@StartDate", DateTime.Now);
+                    command.Parameters.Add("@EmpId",SqlDbType.Int).Direction = ParameterDirection.Output;
 
                     this.connection.Open();
                     var result = command.ExecuteNonQuery();
+                    model.EmployeeID = Convert.ToInt32(command.Parameters["@EmpId"].Value);
+
                     this.connection.Close();
+
                     if (result != 0)
                     {
+                        employeeList.Add(model);
                         return true;
                     }
                     return false;
@@ -95,6 +116,12 @@ namespace EmployeePayrollService
             return false;
         }
 
+        /// <summary>
+        /// Update employee salary in database
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="salary"></param>
+        /// <returns>true or false</returns>
         public bool UpdateSalary(string name, decimal salary)
         {
             connection = new SqlConnection(connectionString);
@@ -112,6 +139,11 @@ namespace EmployeePayrollService
                     var result = command.ExecuteNonQuery();
                     if(result != 0)
                     {
+                        foreach(var employee in employeeList)
+                        {
+                            if (employee.EmployeeFirstName.Equals(name))
+                                employee.BasicPay = salary;
+                        }
                         return true;
                     }
                     return false;
@@ -128,6 +160,11 @@ namespace EmployeePayrollService
             return false;
         }
 
+        /// <summary>
+        /// Get employees given a range of start dates
+        /// </summary>
+        /// <param name="date1"></param>
+        /// <param name="date2"></param>
         public void GetEmployeesGivenDateRange(DateTime date1,DateTime date2)
         {
             connection = new SqlConnection(connectionString);
@@ -177,6 +214,9 @@ namespace EmployeePayrollService
             }
         }
 
+        /// <summary>
+        /// Get aggregate salary details by gender
+        /// </summary>
         public void GetAggregateSalaryDetailsByGender()
         {
             connection = new SqlConnection(connectionString);
