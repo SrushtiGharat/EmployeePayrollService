@@ -176,5 +176,45 @@ namespace EmployeePayrollService
                 this.connection.Close();
             }
         }
+
+        public void GetAggregateSalaryDetailsByGender()
+        {
+            connection = new SqlConnection(connectionString);
+            try
+            {
+                string query = @"select Gender,SUM(basic_pay),AVG(basic_pay),MIN(basic_pay),MAX(basic_pay),COUNT(id)
+                               from employee_payroll group by gender";
+                SqlCommand command = new SqlCommand(query, this.connection);
+                this.connection.Open();
+                SqlDataReader dr = command.ExecuteReader();
+                if (dr.HasRows)
+                {
+                    Console.WriteLine("Gender\tSUM\tAVG\tMIN\tMAX\tCount");
+                    while (dr.Read())
+                    {
+                        string gender = dr.GetString(0);
+                        decimal SUM = dr.GetDecimal(1);
+                        decimal AVG = dr.GetDecimal(2);
+                        decimal MIN = dr.GetDecimal(3);
+                        decimal MAX = dr.GetDecimal(4);
+                        int Count = dr.GetInt32(5);
+                        Console.WriteLine(gender + "\t" + SUM + "\t" + AVG + "\t" + MIN + "\t" + MAX + "\t" + Count);
+                        Console.WriteLine("\n");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No such records found");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                this.connection.Close();
+            }
+        }
     }
 }

@@ -9,7 +9,8 @@ namespace EmployeePayrollService
             Console.WriteLine("Welcome to Employee Payroll Service");
             EmployeeRepo employeeRepo = new EmployeeRepo();
 
-            Console.WriteLine("1.Get all values\n2.Insert value\n3.Update salary\n4.Get employees joined within a date range");
+            Console.WriteLine("1.Get all values\n2.Insert value\n3.Update salary\n4.Get employees joined within a date range\n" +
+                "5.Get Aggregate Salary Details By Gender");
             int choice = Convert.ToInt32(Console.ReadLine());
 
             switch (choice)
@@ -50,6 +51,9 @@ namespace EmployeePayrollService
                     string[] dates = Console.ReadLine().Split(",");
 
                     employeeRepo.GetEmployeesGivenDateRange(Convert.ToDateTime(dates[0]), Convert.ToDateTime(dates[1]));
+                    break;
+                case 5:
+                    employeeRepo.GetAggregateSalaryDetailsByGender();
                     break;
                 default:
                     Console.WriteLine("Invalid Input");
