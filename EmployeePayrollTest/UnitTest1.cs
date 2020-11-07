@@ -19,10 +19,10 @@ namespace EmployeePayrollTest
             employee.Gender = Convert.ToChar("F");
             employee.StartDate = DateTime.Today;
             employee.BasicPay = Convert.ToDecimal(200000);
-            employee.Deductions = Convert.ToDecimal(50000);
-            employee.TaxablePay = Convert.ToDecimal(150000);
-            employee.Tax = Convert.ToDecimal(40000);
-            employee.NetPay = Convert.ToDecimal(110000);
+            employee.Deductions = 0.2M * employee.BasicPay;
+            employee.TaxablePay = employee.BasicPay - employee.Deductions;
+            employee.Tax = 0.1M * employee.TaxablePay;
+            employee.NetPay = employee.BasicPay - employee.Tax;
 
             bool result = employeeRepo.AddEmployee(employee);
             Assert.AreEqual(result, true);

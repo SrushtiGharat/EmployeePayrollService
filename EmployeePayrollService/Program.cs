@@ -18,7 +18,7 @@ namespace EmployeePayrollService
             {
                 case 1: employeeRepo.GetAllEmployee();
                         break;
-                case 2:Console.WriteLine("Enter Name ,Department, Phone no, Address, Gender, BasicPay, Deduction, Taxable Pay, Tax, NetPay ");
+                case 2:Console.WriteLine("Enter Name ,Department, Phone no, Address, Gender, BasicPay");
                     string[] details = Console.ReadLine().Split(",");
 
                     EmployeeModel employee = new EmployeeModel();
@@ -29,10 +29,10 @@ namespace EmployeePayrollService
                     employee.Gender = Convert.ToChar(details[4]);
                     employee.StartDate = DateTime.Today;
                     employee.BasicPay = Convert.ToDecimal(details[5]);
-                    employee.Deductions = Convert.ToDecimal(details[6]);
-                    employee.TaxablePay = Convert.ToDecimal(details[7]);
-                    employee.Tax = Convert.ToDecimal(details[8]);
-                    employee.NetPay = Convert.ToDecimal(details[5]);
+                    employee.Deductions = 0.2M * employee.BasicPay;
+                    employee.TaxablePay = employee.BasicPay - employee.Deductions;
+                    employee.Tax = 0.1M * employee.TaxablePay;
+                    employee.NetPay = employee.BasicPay - employee.Tax;
 
                     result = employeeRepo.AddEmployee(employee);
                     if (result == false)
