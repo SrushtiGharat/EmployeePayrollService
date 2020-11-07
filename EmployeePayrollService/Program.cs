@@ -11,7 +11,7 @@ namespace EmployeePayrollService
             bool result;
 
             Console.WriteLine("1.Get all values\n2.Insert value\n3.Update salary\n4.Get employees joined within a date range\n" +
-                "5.Get Aggregate Salary Details By Gender");
+                "5.Get Aggregate Salary Details By Gender\n6.Remove Employee");
             int choice = Convert.ToInt32(Console.ReadLine());
 
             switch (choice)
@@ -64,6 +64,11 @@ namespace EmployeePayrollService
                     break;
                 case 5:
                     employeeRepo.GetAggregateSalaryDetailsByGender();
+                    break;
+                case 6:
+                    Console.WriteLine("Enter Employee Id");
+                    int id = Convert.ToInt32("Console.ReadLine()");
+                    employeeRepo.RemoveEmployee(id);
                     break;
                 default:
                     Console.WriteLine("Invalid Input");

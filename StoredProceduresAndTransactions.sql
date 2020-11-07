@@ -52,6 +52,40 @@ BEGIN
 	END CATCH
 END
 
+--Remove employee--
+Create or alter procedure SpRemoveEmployeeData
+(
+@EmpId int
+)
+as
+begin
+set XACT_ABORT on;
+begin try
+begin TRANSACTION;
+
+Delete from Emp_Payroll where EId = @EmpId;
+Delete from Employee_Department where EmpId = @EmpId
+Delete from Employee where EId = @EmpId;
+
+COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+select ERROR_NUMBER() AS ErrorNumber, ERROR_MESSAGE() AS ErrorMessage;
+IF(XACT_STATE())=-1
+BEGIN
+  PRINT N'The transaction is in an uncommitable state.'+'Rolling back transaction.'
+  ROLLBACK TRANSACTION;
+  END;
+
+  IF(XACT_STATE())=1
+  BEGIN
+    PRINT 
+	    N'The transaction is committable. '+'Committing transaction.'
+       COMMIT TRANSACTION;
+	END;
+	END CATCH
+END
+
 --Update Salary in table--
 create or ALTER procedure SpUpdateSalary
 (

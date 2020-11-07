@@ -165,6 +165,45 @@ namespace EmployeePayrollService
         }
 
         /// <summary>
+        /// Remove employee details from table
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool RemoveEmployee(int id)
+        {
+            connection = new SqlConnection(connectionString);
+            try 
+            {
+                using (connection)
+                {
+                    SqlCommand command = new SqlCommand("SpRemoveEmployeeData", this.connection);
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@EmpId", id);
+
+                    this.connection.Open();
+
+                    var result = command.ExecuteNonQuery();
+                    if (result != 0)
+                    {
+                        employeeList.RemoveAll(e => e.EmployeeID == id);
+                        return true;
+                    }
+                    return false;
+
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                this.connection.Close();
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Get employees given a range of start dates
         /// </summary>
         /// <param name="date1"></param>

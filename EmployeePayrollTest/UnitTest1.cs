@@ -38,5 +38,15 @@ namespace EmployeePayrollTest
 
             Assert.AreEqual(true, result);
         }
+
+        [TestMethod]
+        public void Given_Id_RemoveEmployeeDetails_Should_Return_True()
+        {
+            int id = 4;
+
+            bool result = employeeRepo.RemoveEmployee(4);
+
+            Assert.AreEqual(true, result);
+        }
     }
 }
