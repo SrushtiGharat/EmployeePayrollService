@@ -1,4 +1,5 @@
-create procedure SpAddEmployeeDetails
+--Insert values in the table--
+create or alter procedure SpAddEmployeeDetails
 (
 @EmployeeName varchar(255),
 @PhoneNumber varchar(255),
@@ -10,16 +11,48 @@ create procedure SpAddEmployeeDetails
 @TaxablePay float,
 @Tax float,
 @NetPay float,
-@StartDate Date
+@StartDate Date,
+@EmpId int out
 )
 as
 begin
-insert into employee_payroll values
+set XACT_ABORT on;
+begin try
+begin TRANSACTION;
+insert into Employee values
 (
-@EmployeeName,@BasicPay,@StartDate,@Gender,@PhoneNumber,@Address,@Department,@Deductions,@TaxablePay,@Tax,@NetPay
+@EmployeeName,@Gender,@PhoneNumber,@Address,@StartDate
 )
-end
+set @EmpId = SCOPE_IDENTITY()
+insert into Emp_Payroll values
+(
+@EmpId,@BasicPay,@Deductions,@TaxablePay,@Tax,@NetPay
+)
+insert into Employee_Department values
+(
+@EmpId , (select DeptId from Department where DeptName = @Department)
+)
 
+COMMIT TRANSACTION;
+END TRY
+BEGIN CATCH
+select ERROR_NUMBER() AS ErrorNumber, ERROR_MESSAGE() AS ErrorMessage;
+IF(XACT_STATE())=-1
+BEGIN
+  PRINT N'The transaction is in an uncommitable state.'+'Rolling back transaction.'
+  ROLLBACK TRANSACTION;
+  END;
+
+  IF(XACT_STATE())=1
+  BEGIN
+    PRINT 
+	    N'The transaction is committable. '+'Committing transaction.'
+       COMMIT TRANSACTION;
+	END;
+	END CATCH
+END
+
+--Update Salary in table--
 create or ALTER procedure SpUpdateSalary
 (
 @EmployeeName varchar(255),
@@ -34,6 +67,7 @@ Emp_Payroll.EId = Employee.EId where Employee.EName = @EmployeeName
 
 END
 
+--Get Employees By Start Date Range--
 create or Alter procedure SpGetEmployeesByStartDateRange
 (
 @StartDate1 date,
