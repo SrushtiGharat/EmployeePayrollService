@@ -10,7 +10,8 @@ create procedure SpAddEmployeeDetails
 @TaxablePay float,
 @Tax float,
 @NetPay float,
-@StartDate Date
+@StartDate Date,
+@EmpId int out
 )
 as
 begin
@@ -18,6 +19,7 @@ insert into employee_payroll values
 (
 @EmployeeName,@BasicPay,@StartDate,@Gender,@PhoneNumber,@Address,@Department,@Deductions,@TaxablePay,@Tax,@NetPay
 )
+select @EmpId = SCOPE_IDENTITY()
 end
 
 create procedure SpUpdateSalary
