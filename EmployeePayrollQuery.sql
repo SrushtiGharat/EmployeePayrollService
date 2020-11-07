@@ -138,7 +138,7 @@ ON Employee.EId = Emp_Payroll.EId GROUP BY Gender;
 
 select BasicPay from Emp_Payroll INNER JOIN Employee ON Emp_Payroll.EId = Employee.EId where EName = 'Bill';
 
-select Employee.EId ,EName, DeptName,BasicPay from Employee 
+select Employee.EId ,EName,BasicPay,StartDate,Gender,PhoneNo,Address,DeptName,Deduction,TaxablePay,IncomeTax,NetPay from Employee 
 INNER JOIN Employee_Department ON Employee.EId = Employee_Department.EmpId
 INNER JOIN  Emp_Payroll ON Employee.EId = Emp_Payroll.EId
 INNER JOIN Department ON Department.DeptId = Employee_Department.DeptId;

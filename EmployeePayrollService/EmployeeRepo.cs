@@ -23,7 +23,11 @@ namespace EmployeePayrollService
                 EmployeeModel employeeModel = new EmployeeModel();
                 using (this.connection)
                 {
-                    string query = @"Select * from employee_payroll;";
+                    string query = @"select Employee.EId ,EName,BasicPay,StartDate,Gender,PhoneNo,Address,DeptName,Deduction,TaxablePay,IncomeTax,NetPay
+                                     from Employee INNER JOIN Employee_Department ON Employee.EId = Employee_Department.EmpId
+                                     INNER JOIN  Emp_Payroll ON Employee.EId = Emp_Payroll.EId
+                                     INNER JOIN Department ON Department.DeptId = Employee_Department.DeptId;";
+
                     SqlCommand cmd = new SqlCommand(query, this.connection);
                     this.connection.Open();
                     SqlDataReader dr = cmd.ExecuteReader();
@@ -74,7 +78,7 @@ namespace EmployeePayrollService
             try
             {
                 using (this.connection)
-                {                   
+                {
                     SqlCommand command = new SqlCommand("SpAddEmployeeDetails", this.connection);
                     command.CommandType = System.Data.CommandType.StoredProcedure;
 
@@ -89,7 +93,7 @@ namespace EmployeePayrollService
                     command.Parameters.AddWithValue("@Tax", model.Tax);
                     command.Parameters.AddWithValue("@NetPay", model.NetPay);
                     command.Parameters.AddWithValue("@StartDate", DateTime.Now);
-                    command.Parameters.Add("@EmpId",SqlDbType.Int).Direction = ParameterDirection.Output;
+                    command.Parameters.Add("@EmpId", SqlDbType.Int).Direction = ParameterDirection.Output;
 
                     this.connection.Open();
                     var result = command.ExecuteNonQuery();
@@ -137,9 +141,9 @@ namespace EmployeePayrollService
                     this.connection.Open();
 
                     var result = command.ExecuteNonQuery();
-                    if(result != 0)
+                    if (result != 0)
                     {
-                        foreach(var employee in employeeList)
+                        foreach (var employee in employeeList)
                         {
                             if (employee.EmployeeFirstName.Equals(name))
                                 employee.BasicPay = salary;
@@ -165,14 +169,14 @@ namespace EmployeePayrollService
         /// </summary>
         /// <param name="date1"></param>
         /// <param name="date2"></param>
-        public void GetEmployeesGivenDateRange(DateTime date1,DateTime date2)
+        public void GetEmployeesGivenDateRange(DateTime date1, DateTime date2)
         {
             connection = new SqlConnection(connectionString);
             try
             {
                 EmployeeModel employeeModel = new EmployeeModel();
                 SqlCommand command = new SqlCommand("SpGetEmployeesByStartDateRange", this.connection);
-                command.CommandType =  System.Data.CommandType.StoredProcedure;
+                command.CommandType = System.Data.CommandType.StoredProcedure;
                 command.Parameters.AddWithValue("@StartDate1", date1);
                 command.Parameters.AddWithValue("@StartDate2", date2);
                 this.connection.Open();
@@ -204,7 +208,7 @@ namespace EmployeePayrollService
                     Console.WriteLine("No such records found");
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
@@ -222,8 +226,9 @@ namespace EmployeePayrollService
             connection = new SqlConnection(connectionString);
             try
             {
-                string query = @"select Gender,SUM(basic_pay),AVG(basic_pay),MIN(basic_pay),MAX(basic_pay),COUNT(id)
-                               from employee_payroll group by gender";
+                string query = @"select Gender,SUM(BasicPay),AVG(BasicPay), MIN(BasicPay),MAX(BasicPay),Count(Employee.EId) from Employee INNER JOIN Emp_Payroll 
+                                  ON Employee.EId = Emp_Payroll.EId GROUP BY Gender";
+
                 SqlCommand command = new SqlCommand(query, this.connection);
                 this.connection.Open();
                 SqlDataReader dr = command.ExecuteReader();
