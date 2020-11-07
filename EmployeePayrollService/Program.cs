@@ -43,12 +43,13 @@ namespace EmployeePayrollService
                     Console.WriteLine("Records added successfully");
                     break;
 
-                case 3:Console.WriteLine("Enter employee name");
-                    string name = Console.ReadLine();
+                case 3:
+                    Console.WriteLine("Enter Employee Id");
+                    int empid = Convert.ToInt32("Console.ReadLine()");
                     Console.WriteLine("Enter new salary");
                     decimal salary = Convert.ToDecimal(Console.ReadLine());
 
-                    result = employeeRepo.UpdateSalary(name, salary);
+                    result = employeeRepo.UpdateSalary(empid, salary);
                     if(result == false)
                     {
                         Console.WriteLine("Salary update not successfull");

@@ -126,7 +126,7 @@ namespace EmployeePayrollService
         /// <param name="name"></param>
         /// <param name="salary"></param>
         /// <returns>true or false</returns>
-        public bool UpdateSalary(string name, decimal salary)
+        public bool UpdateSalary(int id, decimal salary)
         {
             connection = new SqlConnection(connectionString);
             try
@@ -135,7 +135,7 @@ namespace EmployeePayrollService
                 {
                     SqlCommand command = new SqlCommand("SpUpdateSalary", this.connection);
                     command.CommandType = System.Data.CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@EmployeeName", name);
+                    command.Parameters.AddWithValue("@EmpId", id);
                     command.Parameters.AddWithValue("@BasicPay", salary);
 
                     this.connection.Open();
@@ -145,7 +145,7 @@ namespace EmployeePayrollService
                     {
                         foreach (var employee in employeeList)
                         {
-                            if (employee.EmployeeFirstName.Equals(name))
+                            if (employee.EmployeeID.Equals(id))
                                 employee.BasicPay = salary;
                         }
                         return true;

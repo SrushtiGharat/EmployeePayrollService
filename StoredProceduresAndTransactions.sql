@@ -89,7 +89,7 @@ END
 --Update Salary in table--
 create or ALTER procedure SpUpdateSalary
 (
-@EmployeeName varchar(255),
+@EmpId int,
 @BasicPay money
 )
 AS
@@ -97,7 +97,7 @@ BEGIN
 update Emp_Payroll
 set BasicPay = @BasicPay 
 from Emp_Payroll Inner Join Employee on
-Emp_Payroll.EId = Employee.EId where Employee.EName = @EmployeeName
+Emp_Payroll.EId = Employee.EId where Emp_Payroll.EId = @EmpId
 
 END
 

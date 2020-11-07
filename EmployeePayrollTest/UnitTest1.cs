@@ -31,10 +31,10 @@ namespace EmployeePayrollTest
         [TestMethod]
         public void Given_NameAndSalary_UpdateSalary_Should_Return_True()
         {
-            string name = "Terissa";
+            int id = 2;
             decimal salary = 3000000M;
 
-            bool result = employeeRepo.UpdateSalary(name, salary);
+            bool result = employeeRepo.UpdateSalary(id, salary);
 
             Assert.AreEqual(true, result);
         }
@@ -44,7 +44,7 @@ namespace EmployeePayrollTest
         {
             int id = 4;
 
-            bool result = employeeRepo.RemoveEmployee(4);
+            bool result = employeeRepo.RemoveEmployee(id);
 
             Assert.AreEqual(true, result);
         }
