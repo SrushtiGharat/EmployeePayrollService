@@ -49,7 +49,7 @@ namespace EmployeePayrollService
                         if (ans.ToUpper() == "NO")
                             break;
                     }
-                    employeeRepo.AddMultipleEmployees(empList);
+                    employeeRepo.AddMultipleEmployeesUsingThread(empList);
                     break;
 
                 case 3:

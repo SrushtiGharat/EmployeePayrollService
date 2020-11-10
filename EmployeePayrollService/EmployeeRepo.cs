@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data.SqlClient;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace EmployeePayrollService
 {
@@ -68,17 +69,22 @@ namespace EmployeePayrollService
         }
 
         /// <summary>
-        /// Add multiple employees to database
+        /// Add multiple employees to database using threads
         /// </summary>
         /// <param name="empList"></param>
         /// <returns></returns>
-        public int AddMultipleEmployees(List<EmployeeModel> empList)
+        public int AddMultipleEmployeesUsingThread(List<EmployeeModel> empList)
         {
             int count = 0;
             empList.ForEach(employee =>
             {
                 count++;
-                AddEmployee(employee);
+                Task task = new Task(() =>
+                {
+                    AddEmployee(employee);
+                }
+                );
+                task.Start();
             }
             );
             return count;
@@ -188,7 +194,7 @@ namespace EmployeePayrollService
         public bool RemoveEmployee(int id)
         {
             connection = new SqlConnection(connectionString);
-            try 
+            try
             {
                 using (connection)
                 {
