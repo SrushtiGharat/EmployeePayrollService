@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using EmployeePayrollService;
 using System;
+using System.Collections.Generic;
 
 namespace EmployeePayrollTest
 {
@@ -12,7 +13,7 @@ namespace EmployeePayrollTest
         public void Given_NewEmployeeWhenAdded_Should_SyncWithDB()
         {
             EmployeeModel employee = new EmployeeModel();
-            employee.EmployeeFirstName = "Manasi";
+            employee.EmployeeName = "Manasi";
             employee.Department = "Sales";
             employee.PhoneNumber = "4444444444";
             employee.Address = "03-Pancham Society";
@@ -47,6 +48,45 @@ namespace EmployeePayrollTest
             bool result = employeeRepo.RemoveEmployee(id);
 
             Assert.AreEqual(true, result);
+        }
+
+        [TestMethod]
+        public void Given_MultipleEmployees_WhenAdded_SholdReturn_Count()
+        {
+            List<EmployeeModel> empList = new List<EmployeeModel>();
+            
+            EmployeeModel employee1 = new EmployeeModel();
+            employee1.EmployeeName = "Shreya";
+            employee1.Department = "Finance";
+            employee1.PhoneNumber = "9823439977";
+            employee1.Address = "Delhi";
+            employee1.Gender = Convert.ToChar("F");
+            employee1.StartDate = DateTime.Today;
+            employee1.BasicPay = Convert.ToDecimal(100000);
+            employee1.Deductions = 0.2M * employee1.BasicPay;
+            employee1.TaxablePay = employee1.BasicPay - employee1.Deductions;
+            employee1.Tax = 0.1M * employee1.TaxablePay;
+            employee1.NetPay = employee1.BasicPay - employee1.Tax;
+            empList.Add(employee1);
+
+            EmployeeModel employee2 = new EmployeeModel();
+            employee2.EmployeeName = "Raghu";
+            employee2.Department = "Marketing";
+            employee2.PhoneNumber = "7028827730";
+            employee2.Address = "Hyderabad";
+            employee2.Gender = Convert.ToChar("M");
+            employee2.StartDate = DateTime.Today;
+            employee2.BasicPay = Convert.ToDecimal(300000);
+            employee2.Deductions = 0.2M * employee2.BasicPay;
+            employee2.TaxablePay = employee2.BasicPay - employee2.Deductions;
+            employee2.Tax = 0.1M * employee2.TaxablePay;
+            employee2.NetPay = employee2.BasicPay - employee2.Tax;
+            empList.Add(employee2);
+
+            DateTime startTime = DateTime.Now;
+            employeeRepo.AddMultipleEmployees(empList);
+            DateTime stopTime = DateTime.Now;
+            Console.WriteLine("Duration without thread :" + (stopTime - startTime));
         }
     }
 }

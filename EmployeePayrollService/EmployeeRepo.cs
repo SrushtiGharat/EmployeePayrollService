@@ -37,7 +37,7 @@ namespace EmployeePayrollService
                         while (dr.Read())
                         {
                             employeeModel.EmployeeID = dr.GetInt32(0);
-                            employeeModel.EmployeeFirstName = dr.GetString(1);
+                            employeeModel.EmployeeName = dr.GetString(1);
                             employeeModel.BasicPay = dr.GetDecimal(2);
                             employeeModel.StartDate = dr.GetDateTime(3);
                             employeeModel.Gender = Convert.ToChar(dr.GetString(4));
@@ -51,7 +51,7 @@ namespace EmployeePayrollService
 
                             employeeList.Add(employeeModel);
 
-                            Console.WriteLine(employeeModel.EmployeeID + " " + employeeModel.EmployeeFirstName + " " + employeeModel.BasicPay + " " + employeeModel.StartDate + " " + employeeModel.Gender + " " + employeeModel.PhoneNumber + " " + employeeModel.Address + " " + employeeModel.Department + " " + employeeModel.Deductions + " " + employeeModel.TaxablePay + " " + employeeModel.Tax + " " + employeeModel.NetPay);
+                            Console.WriteLine(employeeModel.EmployeeID + " " + employeeModel.EmployeeName + " " + employeeModel.BasicPay + " " + employeeModel.StartDate + " " + employeeModel.Gender + " " + employeeModel.PhoneNumber + " " + employeeModel.Address + " " + employeeModel.Department + " " + employeeModel.Deductions + " " + employeeModel.TaxablePay + " " + employeeModel.Tax + " " + employeeModel.NetPay);
                             Console.WriteLine("\n");
                         }
                     }
@@ -68,6 +68,22 @@ namespace EmployeePayrollService
         }
 
         /// <summary>
+        /// Add multiple employees to database
+        /// </summary>
+        /// <param name="empList"></param>
+        /// <returns></returns>
+        public int AddMultipleEmployees(List<EmployeeModel> empList)
+        {
+            int count = 0;
+            empList.ForEach(employee =>
+            {
+                count++;
+                AddEmployee(employee);
+            }
+            );
+            return count;
+        }
+        /// <summary>
         /// Add employee to database
         /// </summary>
         /// <param name="model"></param>
@@ -82,7 +98,7 @@ namespace EmployeePayrollService
                     SqlCommand command = new SqlCommand("SpAddEmployeeDetails", this.connection);
                     command.CommandType = System.Data.CommandType.StoredProcedure;
 
-                    command.Parameters.AddWithValue("@EmployeeName", model.EmployeeFirstName);
+                    command.Parameters.AddWithValue("@EmployeeName", model.EmployeeName);
                     command.Parameters.AddWithValue("@PhoneNumber", model.PhoneNumber);
                     command.Parameters.AddWithValue("@Address", model.Address);
                     command.Parameters.AddWithValue("@Department", model.Department);
@@ -226,7 +242,7 @@ namespace EmployeePayrollService
                     while (dr.Read())
                     {
                         employeeModel.EmployeeID = dr.GetInt32(0);
-                        employeeModel.EmployeeFirstName = dr.GetString(1);
+                        employeeModel.EmployeeName = dr.GetString(1);
                         employeeModel.BasicPay = dr.GetDecimal(2);
                         employeeModel.StartDate = dr.GetDateTime(3);
                         employeeModel.Gender = Convert.ToChar(dr.GetString(4));
@@ -238,7 +254,7 @@ namespace EmployeePayrollService
                         employeeModel.Tax = dr.GetDecimal(10);
                         employeeModel.NetPay = dr.GetDecimal(11);
 
-                        Console.WriteLine(employeeModel.EmployeeID + " " + employeeModel.EmployeeFirstName + " " + employeeModel.BasicPay + " " + employeeModel.StartDate + " " + employeeModel.Gender + " " + employeeModel.PhoneNumber + " " + employeeModel.Address + " " + employeeModel.Department + " " + employeeModel.Deductions + " " + employeeModel.TaxablePay + " " + employeeModel.Tax + " " + employeeModel.NetPay);
+                        Console.WriteLine(employeeModel.EmployeeID + " " + employeeModel.EmployeeName + " " + employeeModel.BasicPay + " " + employeeModel.StartDate + " " + employeeModel.Gender + " " + employeeModel.PhoneNumber + " " + employeeModel.Address + " " + employeeModel.Department + " " + employeeModel.Deductions + " " + employeeModel.TaxablePay + " " + employeeModel.Tax + " " + employeeModel.NetPay);
                         Console.WriteLine("\n");
                     }
                 }
