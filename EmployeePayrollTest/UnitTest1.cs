@@ -84,9 +84,10 @@ namespace EmployeePayrollTest
             empList.Add(employee2);
 
             DateTime startTime = DateTime.Now;
-            employeeRepo.AddMultipleEmployeesUsingThread(empList);
+            int result = employeeRepo.AddMultipleEmployeesUsingThread(empList);
             DateTime stopTime = DateTime.Now;
             Console.WriteLine("Duration without thread :" + (stopTime - startTime));
+            Assert.AreEqual(2, result);
         }
     }
 }

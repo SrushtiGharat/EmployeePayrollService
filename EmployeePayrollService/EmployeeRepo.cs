@@ -9,7 +9,7 @@ namespace EmployeePayrollService
 {
     public class EmployeeRepo
     {
-        public static string connectionString = "Data Source=DESKTOP-QP0QMA4\\SQLEXPRESS;Initial Catalog=payroll_service;Integrated Security=True";
+        public static string connectionString = @"Data Source=DESKTOP-QP0QMA4\SQLEXPRESS;Initial Catalog=payroll_service;Integrated Security=True";
         SqlConnection connection;
         List<EmployeeModel> employeeList = new List<EmployeeModel>();
 
@@ -66,6 +66,10 @@ namespace EmployeePayrollService
             {
                 System.Console.WriteLine(e.Message);
             }
+            finally
+            {
+                connection.Close();
+            }
         }
 
         /// <summary>
@@ -85,6 +89,8 @@ namespace EmployeePayrollService
                 }
                 );
                 task.Start();
+                task.Wait();
+                //task.RunSynchronously();
             }
             );
             return count;
@@ -96,13 +102,13 @@ namespace EmployeePayrollService
         /// <returns>true or false</returns>
         public bool AddEmployee(EmployeeModel model)
         {
-            connection = new SqlConnection(connectionString);
+            this.connection = new SqlConnection(connectionString);
             try
             {
-                using (this.connection)
+                using (connection)
                 {
-                    SqlCommand command = new SqlCommand("SpAddEmployeeDetails", this.connection);
-                    command.CommandType = System.Data.CommandType.StoredProcedure;
+                    SqlCommand command = new SqlCommand("SpAddEmployeeDetails",this.connection);
+                    command.CommandType = CommandType.StoredProcedure;
 
                     command.Parameters.AddWithValue("@EmployeeName", model.EmployeeName);
                     command.Parameters.AddWithValue("@PhoneNumber", model.PhoneNumber);
@@ -119,9 +125,8 @@ namespace EmployeePayrollService
 
                     this.connection.Open();
                     var result = command.ExecuteNonQuery();
-                    model.EmployeeID = Convert.ToInt32(command.Parameters["@EmpId"].Value);
-
                     this.connection.Close();
+                    model.EmployeeID = Convert.ToInt32(command.Parameters["@EmpId"].Value);
 
                     if (result != 0)
                     {
@@ -141,7 +146,7 @@ namespace EmployeePayrollService
             }
             return false;
         }
-
+        //
         /// <summary>
         /// Update employee salary in database
         /// </summary>
