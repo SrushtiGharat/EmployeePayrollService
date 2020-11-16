@@ -95,7 +95,7 @@ namespace RestSharpTest
         /// Update employee salary
         /// </summary>
         [TestMethod]
-        public void UpdateSalary()
+        public void Given_NewSalary_ShouldReturn_UpdateSalaryEmployee()
         {
             RestRequest request = new RestRequest("/employees/3", Method.PUT);
             JObject jObjectBody = new JObject();
@@ -109,6 +109,19 @@ namespace RestSharpTest
             Employee dataResponse = JsonConvert.DeserializeObject<Employee>(response.Content);
             Assert.AreEqual(3, dataResponse.id);
             Assert.AreEqual(40000, dataResponse.Salary);
+        }
+
+        /// <summary>
+        /// Delete employee details
+        /// </summary>
+        [TestMethod]
+        public void Given_EmployeeId_WhenDeleted_ShouldReturn_StatusOK()
+        {
+            RestRequest request = new RestRequest("/employees/16", Method.DELETE);
+
+            IRestResponse response = client.Execute(request);
+
+            Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.OK);
         }
     }
 }
