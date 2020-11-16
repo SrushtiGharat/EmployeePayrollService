@@ -90,5 +90,25 @@ namespace RestSharpTest
 
             Assert.AreEqual(13, dataResponse.Count);
         }
+
+        /// <summary>
+        /// Update employee salary
+        /// </summary>
+        [TestMethod]
+        public void UpdateSalary()
+        {
+            RestRequest request = new RestRequest("/employees/3", Method.PUT);
+            JObject jObjectBody = new JObject();
+            jObjectBody.Add("name", "Shiv");
+            jObjectBody.Add("Salary", "40000");
+            request.AddParameter("application/json", jObjectBody, ParameterType.RequestBody);
+
+            IRestResponse response = client.Execute(request);
+
+            Assert.AreEqual(response.StatusCode, System.Net.HttpStatusCode.OK);
+            Employee dataResponse = JsonConvert.DeserializeObject<Employee>(response.Content);
+            Assert.AreEqual(3, dataResponse.id);
+            Assert.AreEqual(40000, dataResponse.Salary);
+        }
     }
 }
