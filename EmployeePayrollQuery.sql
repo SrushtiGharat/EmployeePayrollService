@@ -142,3 +142,6 @@ select Employee.EId ,EName,BasicPay,StartDate,Gender,PhoneNo,Address,DeptName,De
 INNER JOIN Employee_Department ON Employee.EId = Employee_Department.EmpId
 INNER JOIN  Emp_Payroll ON Employee.EId = Emp_Payroll.EId
 INNER JOIN Department ON Department.DeptId = Employee_Department.DeptId;
+
+EXEC SpRemoveEmployeeData @EmpId = 4
+dbcc checkident("Employee",RESEED,3)

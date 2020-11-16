@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeePayrollService", "EmployeePayrollService\EmployeePayrollService.csproj", "{D18DF11D-6737-4812-BF6B-71BC464D65D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeePayrollTest", "EmployeePayrollTest\EmployeePayrollTest.csproj", "{7DD06411-62C3-4D1D-839C-B65E73AB40B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeePayrollTest", "EmployeePayrollTest\EmployeePayrollTest.csproj", "{7DD06411-62C3-4D1D-839C-B65E73AB40B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestSharpTest", "RestSharpTest\RestSharpTest.csproj", "{CAA83E22-15BD-434D-9F55-B26F05017A05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{7DD06411-62C3-4D1D-839C-B65E73AB40B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DD06411-62C3-4D1D-839C-B65E73AB40B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DD06411-62C3-4D1D-839C-B65E73AB40B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAA83E22-15BD-434D-9F55-B26F05017A05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAA83E22-15BD-434D-9F55-B26F05017A05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAA83E22-15BD-434D-9F55-B26F05017A05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAA83E22-15BD-434D-9F55-B26F05017A05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

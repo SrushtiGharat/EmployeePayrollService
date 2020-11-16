@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Data.SqlClient;
 using System.Data;
 using System.Threading.Tasks;
@@ -11,6 +10,7 @@ namespace EmployeePayrollService
     {
         public static string connectionString = @"Data Source=DESKTOP-QP0QMA4\SQLEXPRESS;Initial Catalog=payroll_service;Integrated Security=True";
         SqlConnection connection;
+        JSonServerOperations jSonServer = new JSonServerOperations();
         List<EmployeeModel> employeeList = new List<EmployeeModel>();
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace EmployeePayrollService
                             employeeModel.Tax = dr.GetDecimal(10);
                             employeeModel.NetPay = dr.GetDecimal(11);
 
-                            employeeList.Add(employeeModel);
+                            employeeList.Add(employeeModel);                           
 
                             Console.WriteLine(employeeModel.EmployeeID + " " + employeeModel.EmployeeName + " " + employeeModel.BasicPay + " " + employeeModel.StartDate + " " + employeeModel.Gender + " " + employeeModel.PhoneNumber + " " + employeeModel.Address + " " + employeeModel.Department + " " + employeeModel.Deductions + " " + employeeModel.TaxablePay + " " + employeeModel.Tax + " " + employeeModel.NetPay);
                             Console.WriteLine("\n");
